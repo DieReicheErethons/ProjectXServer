@@ -63,6 +63,10 @@ public class Player {
 		}
 	}
 
+	public static Set<Player> get(){
+		return players;
+	}
+
 	//Getter and Setters
 	public Connection getConnection() {
 		return this.connection;

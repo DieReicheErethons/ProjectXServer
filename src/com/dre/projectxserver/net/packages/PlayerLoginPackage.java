@@ -1,8 +1,5 @@
 package com.dre.projectxserver.net.packages;
 
-import java.util.logging.Level;
-
-import com.dre.projectxserver.Main;
 import com.dre.projectxserver.contents.Player;
 import com.esotericsoftware.kryonet.Connection;
 
@@ -11,24 +8,18 @@ public class PlayerLoginPackage extends NetPackage{
 	public int id;
 
 	@Override
-	public void onRecieve(Connection connection, Object object) {
-		if(object instanceof PlayerLoginPackage){
-			Main.m.logger.log(Level.INFO, "TEST2");
+	public void onRecieve(Connection connection) {
+		Player player = new Player(this.name, connection);
 
-			PlayerLoginPackage loginPackage = (PlayerLoginPackage) object;
+		this.id = player.getId();
 
-			Player player = new Player(loginPackage.name, connection);
-
-			loginPackage.id = player.getId();
-
-			for(Player oplayer : Player.players){
-				oplayer.getConnection().sendTCP(loginPackage);
-				if(oplayer != player){
-					PlayerNewPackage playerNew = new PlayerNewPackage();
-					playerNew.name = oplayer.getName();
-					playerNew.id = oplayer.getId();
-					player.getConnection().sendTCP(playerNew);
-				}
+		for(Player oplayer : Player.players){
+			oplayer.getConnection().sendTCP(this);
+			if(oplayer != player){
+				PlayerNewPackage playerNew = new PlayerNewPackage();
+				playerNew.name = oplayer.getName();
+				playerNew.id = oplayer.getId();
+				player.getConnection().sendTCP(playerNew);
 			}
 		}
 	}

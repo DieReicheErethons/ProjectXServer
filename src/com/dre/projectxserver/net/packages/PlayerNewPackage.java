@@ -7,7 +7,7 @@ public class PlayerNewPackage extends NetPackage{
 	public int id;
 
 	@Override
-	public void onRecieve(Connection connection, Object object) {
+	public void onRecieve(Connection connection) {
 
 	}
 }

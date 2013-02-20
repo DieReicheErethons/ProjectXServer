@@ -2,7 +2,6 @@ package com.dre.projectxserver.net;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import com.dre.projectxserver.net.packages.NetPackage;
 import com.dre.projectxserver.net.packages.PlayerLoginPackage;
 import com.dre.projectxserver.net.packages.PlayerNewPackage;
 import com.dre.projectxserver.net.packages.PlayerPositionPackage;
@@ -11,7 +10,7 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
 
 public class Network {
-	public static CopyOnWriteArrayList<NetPackage> netPackages = new CopyOnWriteArrayList<NetPackage>();
+	public static CopyOnWriteArrayList<Class<?>> netPackages = new CopyOnWriteArrayList<Class<?>>();
 
 	public static Kryo kryo;
 
@@ -25,16 +24,16 @@ public class Network {
 		kryo = endPoint.getKryo();
 
 		//Initialize packages
-		netPackages.add(playerLogin);
-		netPackages.add(playerPosition);
-		netPackages.add(playerVisible);
-		netPackages.add(playerNew);
+		netPackages.add(PlayerLoginPackage.class);
+		netPackages.add(PlayerPositionPackage.class);
+		netPackages.add(PlayerVisiblePackage.class);
+		netPackages.add(PlayerNewPackage.class);
 
 		//Initialize kryo classes
-		kryo.register(playerLogin.getClass());
-		kryo.register(playerPosition.getClass());
-		kryo.register(playerVisible.getClass());
-		kryo.register(playerNew.getClass());
+		kryo.register(PlayerLoginPackage.class);
+		kryo.register(PlayerPositionPackage.class);
+		kryo.register(PlayerVisiblePackage.class);
+		kryo.register(PlayerNewPackage.class);
 
 		//TODO: Automatisieren
 	}
