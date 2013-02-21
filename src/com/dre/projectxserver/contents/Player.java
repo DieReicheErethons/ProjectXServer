@@ -8,6 +8,8 @@ import com.esotericsoftware.kryonet.Connection;
 
 public class Player {
 	public static Set<Player> players = new HashSet<Player>();
+
+	public static Set<Integer> freeIds = new HashSet<Integer>();
 	public static int idCount = 0;
 
 	private Connection connection;
@@ -22,9 +24,7 @@ public class Player {
 
 		this.name = name;
 		this.connection = connection;
-		this.id = idCount;
-
-		idCount++;
+		this.id = getFreeId();
 	}
 
 	public int getDistance(Player oplayer){
@@ -41,6 +41,10 @@ public class Player {
 		return 0;
 	}
 
+	public void remove() {
+		freeIds.add(this.id);
+		players.remove(this);
+	}
 
 	//Static methods
 	public static void update(){
@@ -65,6 +69,26 @@ public class Player {
 
 	public static Set<Player> get(){
 		return players;
+	}
+
+	public static Player get(Connection connection) {
+		for(Player player : players){
+			if(player.getConnection() == connection){
+				return player;
+			}
+		}
+
+		return null;
+	}
+
+	public static int getFreeId(){
+		for(Integer id : freeIds){
+			freeIds.remove(id);
+			return id;
+		}
+
+		idCount++;
+		return idCount;
 	}
 
 	//Getter and Setters
